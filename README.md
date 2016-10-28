@@ -161,7 +161,7 @@ Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None
 
 ## RUNNING THE EXAMPLE SKETCH
 
-1) Start the Arduino IDE and open the example sketch  
+1) Start the Arduino IDE and open the relevant example sketch  
 2) Hook-up the PCA9536 to the Arduino as explained in the sketch's notes   
 3) Upload the sketch to the Arduino  
 
