@@ -1,0 +1,43 @@
+#######################################
+# Syntax Coloring Map For MCP9802
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+PCA9536_RGB	KEYWORD1
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+init	KEYWORD2
+turnOn	KEYWORD2
+turnOff	KEYWORD2
+toggle	KEYWORD2
+blinkSetup	KEYWORD2
+blinkOn	KEYWORD2
+blinkOff	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+C_ANODE	LITERAL1
+C_CATHODE	LITERAL1
+RED	LITERAL1
+GREEN	LITERAL1
+BLUE	LITERAL1
+
+#######################################
+# Built-In Variables (LITERAL2)
+#######################################
+
+led_type_t	LITERAL2
+color_t	LITERAL2
+blink	LITERAL2

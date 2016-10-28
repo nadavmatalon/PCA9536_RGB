@@ -1,0 +1,19 @@
+{
+		"name": "PCA9536_RGB",
+		"version": "1.0.0",
+		"frameworks": "AVR",
+		"license": "MIT",
+		"keywords": "MCP9802, SENSOR, TEMPERATURE, I2C, 12-BIT, HYSTERESIS",
+		"description": "PCA9536 RGB LED Driver",
+		"downloadUrl": "https://github.com/nadavmatalon/PCA9536_RGB/archive/master.zip",
+		"authors":
+		{
+		        "name": "Nadav Matalon",
+		        "maintainer": true
+		},
+		"repository":
+		{
+		    "type": "git",
+		    "url": "https://github.com/NadavMatalon/PCA9536_RGB"
+		}
+}
