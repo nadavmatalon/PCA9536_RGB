@@ -100,10 +100,10 @@ PCA9536_RGB device_name(IO3, IO0, IO1, C_CATHODE);
 
 In this example, the following configuration is defined:
 
-- LED TYPE -> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COMMON-ANODE
-- RED&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PIN IO3
-- GREEN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PIN IO0
-- BLUE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PIN IO1
+- LED TYPE&nbsp -> &nbsp;&nbsp;&nbsp;COMMON-ANODE
+- RED&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;PIN IO3
+- GREEN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;PIN IO0
+- BLUE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;PIN IO1
 
 
 Next, make sure to inlude an instruction for initializing the I2C Bus for the [Wire](https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/libraries/Wire) Library, as well as the newly created PCA9536 instance, as follows:
