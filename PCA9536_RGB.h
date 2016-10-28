@@ -23,76 +23,15 @@
     make use of delays and therefore does not interrupt other routines running simultaniously in the code.
  
  *===============================================================================================================*
- I2C ADDRESS
+    I2C ADDRESS
  *===============================================================================================================*
  
- The PCA9536 has a single I2C address (factory hardwired):
- 
- PART               DEVICE I2C ADDRESS          PART
- NUMBER          (BIN)      (HEX)     (DEC)     MARKING
- PCA9536D        01000001     0x41       65      PCA9536
- 
- *===============================================================================================================*
- REGISTER POINTERS
- *===============================================================================================================*
- 
- REG_INPUT           0x00        // Input Port Register           (R)    B00000000 (Default)
- REG_OUTPUT          0x01        // Output Port Register          (R/W)  B00000001
- REG_POLARITY        0x02        // Polarity Inversion Register   (R/W)  B00000010
- REG_CONFIG          0x03        // Configuration Register        (R/W)  B00000011
- 
- *===============================================================================================================*
- REGISTER 0: INPUT REGIASTER - READ ONLY (0 = LOW / 1 = HIGH)
- *===============================================================================================================*
- 
- DEFAULT (WITH NO EXTENRAL INPUT SIGNAL CONNECTED): 'HIGH' (ALL IO PINS HAVE WEAK PULL-UP RESISTORS)
- 
- DEFAULT
- PIN_IO0             BIT 0          1
- PIN_IO1             BIT 1          1
- PIN_IO2             BIT 2          1
- PIN_IO3             BIT 3          1
- 
- BITS 4-7: NOT USED (DEFAULT: 1)
- 
- *===============================================================================================================*
- REGISTER 1: OUTPUT REGIASTER - READ / WRITE (0 = LOW / 1 = HIGH)
- *===============================================================================================================*
- 
- DEFAULT
- IO0                 BIT 0          1
- IO1                 BIT 1          1
- IO2                 BIT 2          1
- IO3                 BIT 3          1
- 
- BITS 4-7: NOT USED (DEFAULT: 1) - MAY BE SET AS '0' OR '1'
- 
- *===============================================================================================================*
- REGISTER 2: POLARITY REGIASTER - READ / WRITE (0 = NON-INVERTED / 1 = INVERTED)
- *===============================================================================================================*
- 
- DEFAULT
- PIN_IO0             BIT 0         0
- PIN_IO1             BIT 1         0
- PIN_IO2             BIT 2         0
- PIN_IO3             BIT 3         0
- 
- BITS 4-7: NOT USED (DEFAULT: 0) - MAY BE SET AS '0' OR '1'
- 
- *===============================================================================================================*
- REGISTER 3: CONFIGURATION - READ / WRITE (0 = OUTPUT / 1 = INPUT)
- *===============================================================================================================*
- 
- POWER-UP DEFAULT: ALL PINS ARE SET AS 'INPUT' (1)
- 
- DEFAULT
- PIN_IO0             BIT 0         1
- PIN_IO1             BIT 1         1
- PIN_IO2             BIT 2         1
- PIN_IO3             BIT 3         1
- 
- BITS 4-7: NOT USED (DEFAULT: 1) - MAY BE SET AS '0' OR '1'
- 
+     The PCA9536 has a single I2C address (factory hardwired):
+     
+       PART               DEVICE I2C ADDRESS          PART
+      NUMBER          (BIN)      (HEX)     (DEC)     MARKING
+     PCA9536D        01000001     0x41       65      PCA9536
+
 *===============================================================================================================*
     LICENSE
 *===============================================================================================================*
@@ -114,8 +53,7 @@
     IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
+ 
 *==============================================================================================================*/
 
 #if 1
