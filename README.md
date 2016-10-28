@@ -100,7 +100,7 @@ PCA9536_RGB device_name(IO3, IO0, IO1, C_CATHODE);
 
 In this example, the following configuration is defined:
 
-- LED TYPE&nbsp -> &nbsp;&nbsp;&nbsp;COMMON-ANODE
+- LED TYPE&nbsp; -> &nbsp;&nbsp;&nbsp;COMMON-ANODE
 - RED&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;PIN IO3
 - GREEN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;PIN IO0
 - BLUE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;PIN IO1
