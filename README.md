@@ -16,9 +16,6 @@ Communication between the Arduino (master) and the RGB Led (slave) is handled by
 
 The basis of the current API comes from the [PCA9536 Library](https://github.com/nadavmatalon/PCA9536), which is expanded here to include the relevant functions, including: Turning on a specific color (or all colors) on and off, Toggling a color, and an independent Blinking functionality for each color which doesn't make use of delays and therefore does not interrupt other routines running simultaniously in the code.
 
-
-This library provides an API for controlling a single RGB Led (Common-Cathode or Common-Anode) via the I2C Bus. Communication between the Arduino (master) and the RGB Led (slave) is handled by the PCA9536, a 4-Channel I2C GPIO (General Purpose I/O) Expander. The basis of the current API comes from the PCA9536 Library (https://github.com/nadavmatalon/PCA9536), which is expanded here to include the relevant functions, including: Turning on a specific color (or all colors) on and off, Toggling a color, and an independent Blinking functionality for each color which doesn't make use of delays and therefore does not interrupt other routines running simultaniously in the code.
-
 [PCA9536 DATASHEET](http://www.nxp.com/documents/data_sheet/PCA9536.pdf)
 
 ## REPOSITORY CONTENTS
