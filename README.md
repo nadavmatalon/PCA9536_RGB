@@ -109,7 +109,7 @@ In this example, the following configuration is defined:
 
 Next, make sure to inlude an instruction for initializing the I2C Bus for the [Wire](https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/libraries/Wire) Library, as well as the newly created __PCA9536_RGB instance__, as follows:
 
-(There's no need to include the [Wire](https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/libraries/Wire) Library at the top of the sketch as it's already included by the PCA9536 Library)
+(There's no need to include the [Wire](https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/libraries/Wire) Library at the top of the sketch as it's already included by the PCA9536_RGB Library)
 
 ```
 void setup() {
