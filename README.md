@@ -68,27 +68,27 @@ The PCA9536 has a single I2C address (factory hardwired):
 
 ## LIBRARY INSTALLATION & SETUP
 
-Begin by installing the current [MCP9536_RGB]() library and the base [MCP9536 Library](https://github.com/nadavmatalon/PCA9536) either by using the Arduino IDE's Installation Wizard (Arduino Version >1.5) or simply by directly downloading the librarys' ZIP folders from Github, extracting them, and copying the extraxcted folders into your Arduino '/libraries' folder (don't forget to re-start the Arduino IDE after copying the folders so that the new libraries will show up in the list of installed libraries).
+Begin by installing the current [MCP9536_RGB](https://github.com/nadavmatalon/PCA9536_RGB) library and the base [MCP9536 Library](https://github.com/nadavmatalon/PCA9536) either by using the Arduino IDE's Installation Wizard (Arduino Version >1.5) or simply by directly downloading the librarys' ZIP folders from Github, extracting them, and copying the extraxcted folders into your Arduino '/libraries' folder (don't forget to re-start the Arduino IDE after copying the folders so that the new libraries will show up in the list of installed libraries).
 
 Next, include the PCA9536_RGB library at the top of the sketch as follows:
 
-(Note that there is no need to include the base PCA9536 library)
+(The base PCA9536 library will be included automatically and so there's no need to include it here)
 
 ```
 #include "PCA9536_RGB.h"
 ```
 
-At this point you can construct a new PCA9536_RGB default instance by using the following command (place at the top of the sketch after the 'include' line):
+At this point you can construct a new PCA9536_RGB (default) instance by using the following command (place at the top of the sketch after the 'include' line):
 
 ```
-PCA9536_RGB device_name;  // Notice that this constructor doesn't have parenthesis after device_name if using the default settings! (see Note #2 above)
+PCA9536_RGB device_name;  // Notice that this constructor doesn't have parenthesis after device_name! (see Note #2 above)
 ```
 
 The defualt constructor will automatically define the following configuration:
-- LED TYPE: COMMON-ANODE
-- PIN IO0: RED
-- PIN IO1: GREEN
-- PIN IO2: BLUE
+- LED TYPE -> COMMON-ANODE
+- RED&nbsp;&nbsp;&nbsp;-> PIN IO0  
+- GREEN -> PIN IO1  
+- BLUE&nbsp;&nbsp;&nbsp;-> PIN IO2  
 
 (The fourth pin of the PCA9536 - in this case: IO3 - may be left unconnected or could be used for other user-defined purposes).
 
@@ -100,10 +100,10 @@ PCA9536_RGB device_name(IO3, IO0, IO1, C_CATHODE);
 
 In this example, the following configuration is defined:
 
-- LED TYPE: COMMON-ANODE
-- PIN IO3: RED
-- PIN IO0: GREEN
-- PIN IO1: BLUE
+- LED TYPE -> COMMON-ANODE
+- RED&nbsp;&nbsp;&nbsp;-> PIN IO3
+- GREEN&nbsp;-> PIN IO0
+- BLUE&nbsp;&nbsp;-> PIN IO1
 
 
 Next, make sure to inlude an instruction for initializing the I2C Bus for the [Wire](https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/libraries/Wire) Library, as well as the newly created PCA9536 instance, as follows:
