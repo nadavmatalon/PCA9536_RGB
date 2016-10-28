@@ -40,15 +40,14 @@ This library provides an API for controlling a single RGB Led (Common-Cathode or
 
 ## HOOK-UP
 
-PINS 1, 2, 3, 5 (IO0, IO1, IO2, IO3) - Connect to Led's pins pin via an appropriate resistors (fourth IO pin can be used for other user-defined purposes or tied to GND). If Led is Common-Anode connect its fourth pin to the Arduino 5V output. If the Led is Common-Cathode, connect the fourth pin to the Arduino GND.
-PIN 4 (GND) - Connect to Arduino GND
-PIN 6 (SCL) - Connect to Arduino Pin A5 with a 2K2 (400MHz) or 10K (100MHz) pull-up resistor
-PIN 7 (SDA) - Connect to Arduino Pin A4 with a 2K2 (400MHz) or 10K (100MHz) pull-up resistor
-PIN 8 (VCC) - Connect to Arduino 5V output
-DECOUPING   - Connect a 0.1uF Ceramic Capacitor between the PCA9536's VCC & GND pins
+PINS 1, 2, 3, 5 (IO0, IO1, IO2, IO3) - Connect to Led's pins pin via an appropriate resistors (fourth IO pin can be used for other user-defined purposes or tied to GND). If Led is Common-Anode connect its fourth pin to the Arduino 5V output. If the Led is Common-Cathode, connect the fourth pin to the Arduino GND.  
+PIN 4 (GND) - Connect to Arduino GND  
+PIN 6 (SCL) - Connect to Arduino Pin A5 with a 2K2 (400MHz) or 10K (100MHz) pull-up resistor  
+PIN 7 (SDA) - Connect to Arduino Pin A4 with a 2K2 (400MHz) or 10K (100MHz) pull-up resistor  
+PIN 8 (VCC) - Connect to Arduino 5V output  
+DECOUPING   - Connect a 0.1uF Ceramic Capacitor between the PCA9536's VCC & GND pins  
 
 IMPORTANT: It is possible to connect any type of RGB Led (Commone-Anode / Common-Cathode) to any of the PCA9536's I/O pins (IO0, IO1, IO2, IO3), but then it is necessary to update the constructor's configuration accordingly in the sketch itself.
-
 
 ## GENERAL NOTES
 
