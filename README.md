@@ -68,7 +68,7 @@ The PCA9536 has a single I2C address (factory hardwired):
 
 ## LIBRARY INSTALLATION & SETUP
 
-Begin by installing the current [MCP9536 library](https://github.com/nadavmatalon/PCA9536) and the base [MCP9536_RGB Library](https://github.com/nadavmatalon/PCA9536_RGB) either by using the Arduino IDE's Installation Wizard (Arduino Version >1.5) or simply by directly downloading the librarys' ZIP folders from Github, extracting them, and copying the extraxcted folders into your Arduino '/libraries' folder (don't forget to re-start the Arduino IDE after copying the folders so that the new libraries will show up in the list of installed libraries).
+Begin by installing the current [MCP9536_RGB]() library and the base [MCP9536 Library](https://github.com/nadavmatalon/PCA9536) either by using the Arduino IDE's Installation Wizard (Arduino Version >1.5) or simply by directly downloading the librarys' ZIP folders from Github, extracting them, and copying the extraxcted folders into your Arduino '/libraries' folder (don't forget to re-start the Arduino IDE after copying the folders so that the new libraries will show up in the list of installed libraries).
 
 Next, include the PCA9536_RGB library at the top of the sketch as follows:
 
