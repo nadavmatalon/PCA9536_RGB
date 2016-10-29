@@ -109,7 +109,10 @@ In this example, the following configuration is defined:
 
 Next, make sure to inlude an instruction for initializing the I2C Bus for the [Wire](https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/libraries/Wire) Library, as well as the newly created __PCA9536_RGB instance__, as follows:
 
-(There's no need to include the [Wire](https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/libraries/Wire) Library at the top of the sketch as it's already included by the PCA9536_RGB Library)
+
+>NB The order here is important: __device_name.init()__ must come AFTER __Wire.begin()__ - this is necessary because __init()__ sets the registrs' values of the device and so depends on Wire being active.
+
+>NB There's no need to include the [Wire](https://github.com/arduino/Arduino/tree/master/hardware/arduino/avr/libraries/Wire) Library at the top of the sketch as it's already included by the PCA9536_RGB Library).
 
 ```
 void setup() {
@@ -118,7 +121,7 @@ void setup() {
     // ...other setup code...
 }
 ```
->When using either the default or the custom constructors, replace '__device_name__' above with a name of your choice. As the PCA9536 comes with a single hardwired I2C address, initializations of the class instance is done automatically to that address.
+>NB When using either the default or the custom constructors, replace __device_name__ above with a name of your choice. As the PCA9536 comes with a single hardwired I2C address, initializations of the class instance is done automatically to that address.
 
 ## LIBRARY FUNCTIONS
 

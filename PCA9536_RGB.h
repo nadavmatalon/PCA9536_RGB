@@ -91,7 +91,7 @@ namespace Pca9536_Rgb {
         boolean active;
      } blink;
 
-    class PCA9536_RGB: private PCA9536 {
+    class PCA9536_RGB: public PCA9536 {
         public:
             PCA9536_RGB(pin_t pin1 = IO0, pin_t pin2 = IO1, pin_t pin3 = IO2, led_type_t ledType = C_ANODE);
             ~PCA9536_RGB();
