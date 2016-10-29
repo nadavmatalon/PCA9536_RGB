@@ -7,7 +7,8 @@
     PCA9536 RGB LED Driver
  
     Ver. 1.0.0 - First release (25.10.16)
- 
+    Ver. 1.1.0 - Interupt-based Blink (29.10.16)
+
  *==============================================================================================================*
     LICENSE
  *==============================================================================================================*
@@ -110,32 +111,52 @@ void PCA9536_RGB::toggle(color_t color) {                                       
 
 // onTime = length of time (in mS) of led 'ON' state (duty cycle: 50%, default: 500mS)
 
-void PCA9536_RGB::blinkSetup(color_t color, unsigned int onTime) {               // PARAMS: RED / GREEN / BLUE
-    blinks[color] = blink { color, onTime, 0, 0, false };
-}
-
-/*==============================================================================================================*
-     TURN ON BLINK SINGLE COLOR
- *==============================================================================================================*/
-
-void PCA9536_RGB::blinkOn(color_t color) {
-    if (blinks[color].onTime > 0) {
-        if (!blinks[color].active) blinks[color].active = true;
-        blinks[color].tock = millis();
-        if ((blinks[color].tock - blinks[color].tick) >= blinks[color].onTime) {
-            blinks[color].tick = blinks[color].tock;
-            toggle(blinks[color].color);
+void PCA9536_RGB::blinkSetup(unsigned int onTime) {
+    _blinkFlag = false;
+    byte clockSelectBits;
+    unsigned int pwmPeriod;
+    unsigned long cycles = (F_CPU / 2000) * onTime;
+    noInterrupts();
+        TCCR1B = _BV(WGM13);
+        TCCR1A = 0;
+        if (cycles < TIMER1_RES) {
+            clockSelectBits = _BV(CS10);
+            pwmPeriod = cycles;
+        } else if (cycles < TIMER1_RES * 8) {
+            clockSelectBits = _BV(CS11);
+            pwmPeriod = cycles / 8;
+        } else if (cycles < TIMER1_RES * 64) {
+            clockSelectBits = _BV(CS11) | _BV(CS10);
+            pwmPeriod = cycles / 64;
+        } else if (cycles < TIMER1_RES * 256) {
+            clockSelectBits = _BV(CS12);
+            pwmPeriod = cycles / 256;
+        } else if (cycles < TIMER1_RES * 1024) {
+            clockSelectBits = _BV(CS12) | _BV(CS10);
+            pwmPeriod = cycles / 1024;
+        } else {
+            clockSelectBits = _BV(CS12) | _BV(CS10);
+            pwmPeriod = TIMER1_RES - 1;
         }
-    }
+        ICR1 = pwmPeriod;
+        TCCR1B = _BV(WGM13) | clockSelectBits;
+        TIMSK1 = _BV(TOIE1);
+    interrupts();
+}
+
+ISR(TIMER1_OVF_vect) {
+    _blinkFlag = true;
 }
 
 /*==============================================================================================================*
-    TURN OFF BLINK SINGLE COLOR
+     BLINK SINGLE COLOR
  *==============================================================================================================*/
 
-void PCA9536_RGB::blinkOff(color_t color) {
-    if (blinks[color].active && state(color)) turnOff(blinks[color].color);
-    blinks[color].active = false;
+void PCA9536_RGB::blink(color_t color) {
+    if (_blinkFlag) {
+        _blinkFlag = false;
+        toggle(color);
+    }
 }
 
 /*==============================================================================================================*
