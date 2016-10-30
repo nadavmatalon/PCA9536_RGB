@@ -138,7 +138,7 @@ void PCA9536_RGB::blinkSetup(unsigned int onTime) {
             clockSelectBits = _BV(CS12) | _BV(CS10);
             pwmPeriod = TIMER1_RES - 1;
         }
-        ICR1 = pwmPeriod;
+        ICR1   = pwmPeriod;
         TCCR1B = _BV(WGM13) | clockSelectBits;
         TIMSK1 = _BV(TOIE1);
     interrupts();

@@ -98,10 +98,10 @@ namespace Pca9536_Rgb {
             void turnOff(color_t color);
             void turnOff();
             void toggle(color_t color);
+            byte state(color_t color);
             void blinkSetup(unsigned int onTime = 500);
             void blink(color_t color);
         private:
-            byte state(color_t color);
             byte getPin(color_t color);
             byte _ledType;
             byte _red;

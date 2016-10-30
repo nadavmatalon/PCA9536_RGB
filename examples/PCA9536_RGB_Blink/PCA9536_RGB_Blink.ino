@@ -2,14 +2,30 @@
 
 PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);
 
-boolean alertOn = false;
+const byte PIN_D2 = 2;
+
+volatile boolean switchFlag;
 
 void setup() {
-Wire.begin();
-rgb.init();
-rgb.blinkSetup(500);
+    pinMode(PIN_D2, INPUT_PULLUP);
+    switchFlag = digitalRead(PIN_D2) ? false : true;
+    attachInterrupt (digitalPinToInterrupt (PIN_D2), switchPressed, CHANGE);
+    Wire.begin();
+    rgb.init();
+    rgb.blinkSetup(500);
 }
 
 void loop() {
-if (alertOn) rgb.blink(GREEN);
+    switchCondition();
 }
+
+void switchPressed() {
+      switchFlag = digitalRead(PIN_D2) ? false : true;
+}
+
+void switchCondition() {
+    if (switchFlag) rgb.blink(GREEN);  
+    else if (rgb.state(GREEN)) rgb.turnOff(GREEN);
+}
+
+
