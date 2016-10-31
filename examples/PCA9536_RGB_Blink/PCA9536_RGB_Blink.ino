@@ -73,31 +73,31 @@
 
 #include "PCA9536_RGB.h"
 
-PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);
+PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);              // construct a new PCA9536_RGB instance
 
-volatile byte switchFlag;                            // a flag is needed since running the blinking
-                                                     // function over I2C requires too much time to
-void setup() {                                       // be done inside the ISR (Interrupt Service Routine)
-    DDRD &= ~bit(DDD2); PORTD |= bit(PORTD2);        // pinMode(PIN_D2, INPUT_PULLUP)
-    switchFlag = !bitRead(PIND, PIND2);              // !digitalRead(digital pin 2)
-    EICRA |= bit(ISC01);                             // Trigger INT0 on falling edge
-    EIMSK |= bit(INT0);                              // Enable external interrupt INT0
-    sei();                                           // Enable global interrupts
-    Wire.begin();                                    // Join the I2C Bus
-    rgb.init();                                      // Initialize the RGB Led instance
-    rgb.blinkSetup(500);                             // Set blinking rate (= onTime) to 500mS
-}
+volatile byte switchFlag;                             // a flag is needed since running the blinking inside the ISR 
+                                                      // takes too long
+void setup() {
+    DDRD &= ~bit(DDD2); PORTD |= bit(PORTD2);         // pinMode(digital pin 2, INPUT_PULLUP)
+    switchFlag = !bitRead(PIND, PIND2);               // set/clear switchFlag according to buton state (pressed or not)
+    EICRA |= bit(ISC00);                              // Trigger INT0 on CHANGE
+    EIMSK |= bit(INT0);                               // Enable external interrupt INT0
+    sei();                                            // Enable global interrupts
+    Wire.begin();                                     // Join the I2C Bus
+    rgb.init();                                       // Initialize the RGB Led instance
+    rgb.blinkSetup(500);                              // Set blinking rate (= onTime) to 500mS
+  }
 
 void loop() {
-    switchCondition();                               // check if push-button switch is pressed
+    switchCondition();                                // check if button is pressed or not and blink accordingly
 }
 
-ISR(EXT_INT0_vect) {                                 // ISR for external interrupt on digital pin 2
-    switchFlag = !bitRead(PIND, PIND2);              // update switch flag if button is pressed (line goes LOW)
+ISR(EXT_INT0_vect) {                                  // ISR for external interrupt on digital pin 2
+    switchFlag = 1;                                   // if interrupt fires (button is pressed), set switchFlag
 }
 
 void switchCondition() {
-    if (switchFlag) rgb.blink(GREEN);                // if button pressed, blink GREEN color
-    else if (rgb.state(GREEN)) rgb.turnOff(GREEN);   // otherwise, turn GREEN color off (if not, GREEN might
-}                                                    // stay on when the push-button is released)
-
+    if (bitRead(PIND, PIND2)) switchFlag = false;     // if button is not pressed (line is HIGH) clear switchFlag
+    if (switchFlag) rgb.blink(GREEN);                 // if switchFlag is set (button is pressed), blink GREEN color
+    else if (rgb.state(GREEN)) rgb.turnOff(GREEN);    // otherwise, if GREEN color remains ON, turn it OFF
+}
