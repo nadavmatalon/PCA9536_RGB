@@ -7,6 +7,7 @@
     PCA9536 RGB LED Driver
  
     Ver. 1.0.0 - First release (25.10.16)
+    Ver. 1.1.0 - Interupt-based Blink (29.10.16)
 
  *===============================================================================================================*
     INTRODUCTION
@@ -70,8 +71,12 @@ __asm volatile ("nop");
 #include <Arduino.h>
 #include "PCA9536.h"
 
+static volatile byte _blinkFlag = 0;
+
 namespace Pca9536_Rgb {
-    
+
+    const unsigned long TIMER1_RES = 65536;
+
     typedef enum:byte {
         C_ANODE   = 0,
         C_CATHODE = 1
@@ -83,14 +88,6 @@ namespace Pca9536_Rgb {
         BLUE  = 2
     } color_t;
 
-     typedef struct blink {
-        color_t color;
-        unsigned int  onTime;
-        unsigned long tick;
-        unsigned long tock;
-        boolean active;
-     } blink;
-
     class PCA9536_RGB: public PCA9536 {
         public:
             PCA9536_RGB(pin_t pin1 = IO0, pin_t pin2 = IO1, pin_t pin3 = IO2, led_type_t ledType = C_ANODE);
@@ -101,17 +98,15 @@ namespace Pca9536_Rgb {
             void turnOff(color_t color);
             void turnOff();
             void toggle(color_t color);
-            void blinkSetup(color_t color, unsigned int onTime = 500);
-            void blinkOn(color_t color);
-            void blinkOff(color_t color);
-        private:
             byte state(color_t color);
+            void blinkSetup(unsigned int onTime = 500);
+            void blink(color_t color);
+        private:
             byte getPin(color_t color);
             byte _ledType;
             byte _red;
             byte _green;
             byte _blue;
-            blink blinks[3];
     };
 }
 

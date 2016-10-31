@@ -1,6 +1,6 @@
 /*
-    PCA9536_RGB LIBRARY - USAGE EXAMPLE
-    -----------------------------------
+    PCA9536_RGB LIBRARY - BLINK COLOR EXAMPLE
+    -----------------------------------------
 
     INTRODUCTION
     ------------
@@ -25,8 +25,6 @@
         GND --|       |-- IO3
                -------
 
-    This hookup can be used with the following sketch:
-
     PIN 1 (IO0) - Connect BLUE  pin of a Common-Anode RGB Led via appropriate series resistor
     PIN 2 (IO1) - Connect GREEN pin of a Common-Anode RGB Led via appropriate series resistor
     PIN 3 (IO2) - Connect RED   pin of a Common-Anode RGB Led via appropriate series resistor
@@ -39,17 +37,12 @@
 
     RGB LED COMMON-ANODE PIN - Connect to Arduino 5V output
 
+    PUSH BUTTON SWITCH - connect a push-button switch between Arduino Digital Pin 2 and GND.
+
+
     IMPORTANT: It is possible to connect any type of RGB Led (Commone-Anode / Common-Cathode)
                to any of the PCA9536's I/O pins (IO0, IO1, IO2, IO3), but then it is necessary
                to update the constructor's configuration accordingly in the sketch itself.
-
-    RUNNING THE SKETCH
-    ------------------
-    1. Hook-up the PCA9536 and RGB Led as instructed above
-    2. Upload the sketch to the Arduino
-    3. (Optional) Open the Serial Port (make sure the baid-rate is to 9600)
-    4. Sit back and watch the pretty lights :-)
-
 
     BUG REPORTS
     -----------
@@ -82,91 +75,29 @@
 
 PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);
 
-color_t colors[3] = { RED, GREEN, BLUE };
-String colorNames[3] = { "RED", "GREEN", "BLUE" };
- 
-void setup() {
-    Serial.begin(9600);
-    Wire.begin();
-    rgb.init();
-    longDelay();
-    printDivider();
-    Serial.print(F("\nPCA9536 RGB LED LIBRARY USAGE\n"));
-    printDivider();
-    longDelay();
-    colorsOnOff(); 
-    colorsToggle();  
+volatile byte switchFlag;                            // a flag is needed since running the blinking
+                                                     // function over I2C requires too much time to
+void setup() {                                       // be done inside the ISR (Interrupt Service Routine)
+    DDRD &= ~bit(DDD2); PORTD |= bit(PORTD2);        // pinMode(PIN_D2, INPUT_PULLUP)
+    switchFlag = !bitRead(PIND, PIND2);              // !digitalRead(digital pin 2)
+    EICRA |= bit(ISC01);                             // Trigger INT0 on falling edge
+    EIMSK |= bit(INT0);                              // Enable external interrupt INT0
+    sei();                                           // Enable global interrupts
+    Wire.begin();                                    // Join the I2C Bus
+    rgb.init();                                      // Initialize the RGB Led instance
+    rgb.blinkSetup(500);                             // Set blinking rate (= onTime) to 500mS
 }
 
-void loop() {}
-
-void colorsOnOff() {
-   Serial.print(F("\nTURN ON ALL THREE COLORS\n"));
-    rgb.turnOn();
-    longDelay();
-    Serial.print(F("\nTURN OFF ALL THREE COLORS\n"));
-    rgb.turnOff();
-    printDivider();
-    longDelay();
-    Serial.print(F("\nTURN COLORS ON AND OFF INDIVIDUALLY\n"));
-    for (byte i=0; i<3; i++) {
-        Serial.print(F("\nTURN ON "));
-        Serial.print(colorNames[i]);
-        Serial.print(F("\n"));
-        rgb.turnOn(colors[i]);
-        longDelay();
-        Serial.print(F("\nTURN OFF "));
-        Serial.print(colorNames[i]);
-        Serial.print(F("\n"));
-        rgb.turnOff(colors[i]);
-        longDelay();
-    }
-    printDivider();
-    Serial.print(F("\nTURN COLORS ON SEQUENTIALLY\n"));
-    for (byte i=0; i<3; i++) {
-        Serial.print(F("\nTURN ON "));
-        Serial.print(colorNames[i]);
-        Serial.print(F("\n"));
-        rgb.turnOn(colors[i]);
-        longDelay();
-    }
-    Serial.print(F("\nTURN COLORS OFF SEQUENTIALLY\n"));
-    for (byte i=3; i>0; i--) {
-        Serial.print(F("\nTURN OFF "));
-        Serial.print(colorNames[i-1]);
-        Serial.print(F("\n"));
-        rgb.turnOff(colors[i-1]);
-        longDelay();
-    }  
-    printDivider();
-    longDelay();
+void loop() {
+    switchCondition();                               // check if push-button switch is pressed
 }
 
-void colorsToggle() {
-    Serial.print(F("\nTOGGLE COLORS INDIVIDUALY\n"));
-    for (byte i=0; i<3; i++) {
-        Serial.print(F("\nTOGGLE "));
-        Serial.print(colorNames[i]);
-        Serial.print(F("\n"));
-        for (byte j=0; j<10; j++) { 
-            rgb.toggle(colors[i]);
-            shortDelay();
-        }
-        longDelay();
-    }
-    printDivider(); 
-    Serial.print(F("\nDONE\n"));
-    printDivider(); 
+ISR(EXT_INT0_vect) {                                 // ISR for external interrupt on digital pin 2
+    switchFlag = !bitRead(PIND, PIND2);              // update switch flag if button is pressed (line goes LOW)
 }
 
-void printDivider() {
-    Serial.print(F("\n-----------------------------\n"));
-}
+void switchCondition() {
+    if (switchFlag) rgb.blink(GREEN);                // if button pressed, blink GREEN color
+    else if (rgb.state(GREEN)) rgb.turnOff(GREEN);   // otherwise, turn GREEN color off (if not, GREEN might
+}                                                    // stay on when the push-button is released)
 
-void shortDelay() {
-    delay(250);
-}
-
-void longDelay() {
-    delay(1750);
-}

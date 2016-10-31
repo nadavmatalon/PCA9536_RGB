@@ -7,7 +7,8 @@
     PCA9536 RGB LED Driver
  
     Ver. 1.0.0 - First release (25.10.16)
- 
+    Ver. 1.1.0 - Interupt-based Blink (29.10.16)
+
  *==============================================================================================================*
     LICENSE
  *==============================================================================================================*
@@ -59,8 +60,8 @@ PCA9536_RGB::~PCA9536_RGB() {}
 
 void PCA9536_RGB::init() {
     for (byte i=0; i<3; i++) {
-        setMode(getPin(i), _ledType ? IO_INPUT : IO_OUTPUT);
-        setState(getPin(i), _ledType ? IO_LOW : IO_HIGH);
+        setMode(getPin(i), _ledType);
+        setState(getPin(i), ~_ledType);
     }
 }
 
@@ -69,7 +70,7 @@ void PCA9536_RGB::init() {
  *==============================================================================================================*/
 
 void PCA9536_RGB::turnOn(color_t color) {                                        // PARAMS: RED / GREEN / BLUE
-    setState(getPin(color), _ledType ? IO_HIGH : IO_LOW);
+    setState(getPin(color), _ledType);
 }
 
 /*==============================================================================================================*
@@ -77,7 +78,7 @@ void PCA9536_RGB::turnOn(color_t color) {                                       
  *==============================================================================================================*/
 
 void PCA9536_RGB::turnOn() {
-    for (byte i=0; i<3; i++) setState(getPin(i), _ledType ? IO_HIGH : IO_LOW);
+    for (byte i=0; i<3; i++) setState(getPin(i), _ledType);
 }
 
 /*==============================================================================================================*
@@ -85,7 +86,7 @@ void PCA9536_RGB::turnOn() {
  *==============================================================================================================*/
 
 void PCA9536_RGB::turnOff(color_t color) {                                       // PARAM: RED / GREEN / BLUE
-    setState(getPin(color), _ledType ? IO_LOW : IO_HIGH);
+    setState(getPin(color), ~_ledType);
 }
 
 /*==============================================================================================================*
@@ -93,7 +94,7 @@ void PCA9536_RGB::turnOff(color_t color) {                                      
  *==============================================================================================================*/
 
 void PCA9536_RGB::turnOff() {
-    for (byte i=0; i<3; i++) setState(getPin(i), _ledType ? IO_LOW : IO_HIGH);
+    for (byte i=0; i<3; i++) setState(getPin(i), ~_ledType);
 }
 
 /*==============================================================================================================*
@@ -105,37 +106,53 @@ void PCA9536_RGB::toggle(color_t color) {                                       
 }
 
 /*==============================================================================================================*
-     SETUP BLINK SINGLE COLOR
+    BLINK SINGLE COLOR SETUP
  *==============================================================================================================*/
 
 // onTime = length of time (in mS) of led 'ON' state (duty cycle: 50%, default: 500mS)
 
-void PCA9536_RGB::blinkSetup(color_t color, unsigned int onTime) {               // PARAMS: RED / GREEN / BLUE
-    blinks[color] = blink { color, onTime, 0, 0, false };
-}
-
-/*==============================================================================================================*
-     TURN ON BLINK SINGLE COLOR
- *==============================================================================================================*/
-
-void PCA9536_RGB::blinkOn(color_t color) {
-    if (blinks[color].onTime > 0) {
-        if (!blinks[color].active) blinks[color].active = true;
-        blinks[color].tock = millis();
-        if ((blinks[color].tock - blinks[color].tick) >= blinks[color].onTime) {
-            blinks[color].tick = blinks[color].tock;
-            toggle(blinks[color].color);
+void PCA9536_RGB::blinkSetup(unsigned int onTime) {
+    _blinkFlag = 0;
+    byte clockSelectBits;
+    unsigned int pwmPeriod;
+    unsigned long cycles = (F_CPU / 2000) * onTime;
+    cli();
+        TCCR1B = bit(WGM13);
+        TCCR1A = 0;
+        if (cycles < TIMER1_RES) {
+            clockSelectBits = bit(CS10);
+            pwmPeriod = cycles;
+        } else if (cycles < TIMER1_RES * 8) {
+            clockSelectBits = bit(CS11);
+            pwmPeriod = cycles / 8;
+        } else if (cycles < TIMER1_RES * 64) {
+            clockSelectBits = bit(CS11) | bit(CS10);
+            pwmPeriod = cycles / 64;
+        } else if (cycles < TIMER1_RES * 256) {
+            clockSelectBits = bit(CS12);
+            pwmPeriod = cycles / 256;
+        } else if (cycles < TIMER1_RES * 1024) {
+            clockSelectBits = bit(CS12) | bit(CS10);
+            pwmPeriod = cycles / 1024;
+        } else {
+            clockSelectBits = bit(CS12) | bit(CS10);
+            pwmPeriod = TIMER1_RES - 1;
         }
-    }
+        ICR1   = pwmPeriod;
+        TCCR1B = bit(WGM13) | clockSelectBits;
+        TIMSK1 = bit(TOIE1);
+    sei();
 }
 
 /*==============================================================================================================*
-    TURN OFF BLINK SINGLE COLOR
+     BLINK SINGLE COLOR
  *==============================================================================================================*/
 
-void PCA9536_RGB::blinkOff(color_t color) {
-    if (blinks[color].active && state(color)) turnOff(blinks[color].color);
-    blinks[color].active = false;
+void PCA9536_RGB::blink(color_t color) {
+    if (_blinkFlag) {
+        _blinkFlag = 0;
+        toggle(color);
+    }
 }
 
 /*==============================================================================================================*
@@ -143,7 +160,7 @@ void PCA9536_RGB::blinkOff(color_t color) {
  *==============================================================================================================*/
 
 byte PCA9536_RGB::state(color_t color) {
-    return getState(getPin(color)) ? _ledType : _ledType ? IO_LOW : IO_HIGH;
+    return getState(getPin(color)) ? _ledType : ~_ledType;
 }
 
 /*==============================================================================================================*
@@ -157,3 +174,12 @@ byte PCA9536_RGB::getPin(color_t color) {
         case (BLUE):  return _blue;  break;
     }
 }
+
+/*==============================================================================================================*
+    BLINK ISR
+ *==============================================================================================================*/
+
+ISR(TIMER1_OVF_vect) {
+    _blinkFlag = 1;
+}
+
