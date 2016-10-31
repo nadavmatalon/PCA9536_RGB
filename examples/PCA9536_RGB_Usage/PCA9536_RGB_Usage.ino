@@ -43,6 +43,14 @@
                to any of the PCA9536's I/O pins (IO0, IO1, IO2, IO3), but then it is necessary
                to update the constructor's configuration accordingly in the sketch itself.
 
+    RUNNING THE SKETCH
+    ------------------
+    1. Hook-up the PCA9536 and RGB Led as instructed above
+    2. Upload the sketch to the Arduino
+    3. (Optional) Open the Serial Port (make sure the baid-rate is to 9600)
+    4. Sit back and watch the pretty lights :-)
+
+
     BUG REPORTS
     -----------
     Please report any bugs/issues/suggestions in the Github Repository of this library at:
@@ -74,17 +82,91 @@
 
 PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);
 
+color_t colors[3] = { RED, GREEN, BLUE };
+String colorNames[3] = { "RED", "GREEN", "BLUE" };
+ 
 void setup() {
     Serial.begin(9600);
     Wire.begin();
     rgb.init();
-    
+    longDelay();
+    printDivider();
+    Serial.print(F("\nPCA9536 RGB LED LIBRARY USAGE\n"));
+    printDivider();
+    longDelay();
+    colorsOnOff(); 
+    colorsToggle();  
 }
 
 void loop() {}
 
+void colorsOnOff() {
+   Serial.print(F("\nTURN ON ALL THREE COLORS\n"));
+    rgb.turnOn();
+    longDelay();
+    Serial.print(F("\nTURN OFF ALL THREE COLORS\n"));
+    rgb.turnOff();
+    printDivider();
+    longDelay();
+    Serial.print(F("\nTURN COLORS ON AND OFF INDIVIDUALLY\n"));
+    for (byte i=0; i<3; i++) {
+        Serial.print(F("\nTURN ON "));
+        Serial.print(colorNames[i]);
+        Serial.print(F("\n"));
+        rgb.turnOn(colors[i]);
+        longDelay();
+        Serial.print(F("\nTURN OFF "));
+        Serial.print(colorNames[i]);
+        Serial.print(F("\n"));
+        rgb.turnOff(colors[i]);
+        longDelay();
+    }
+    printDivider();
+    Serial.print(F("\nTURN COLORS ON SEQUENTIALLY\n"));
+    for (byte i=0; i<3; i++) {
+        Serial.print(F("\nTURN ON "));
+        Serial.print(colorNames[i]);
+        Serial.print(F("\n"));
+        rgb.turnOn(colors[i]);
+        longDelay();
+    }
+    Serial.print(F("\nTURN COLORS OFF SEQUENTIALLY\n"));
+    for (byte i=3; i>0; i--) {
+        Serial.print(F("\nTURN OFF "));
+        Serial.print(colorNames[i-1]);
+        Serial.print(F("\n"));
+        rgb.turnOff(colors[i-1]);
+        longDelay();
+    }  
+    printDivider();
+    longDelay();
+}
 
+void colorsToggle() {
+    Serial.print(F("\nTOGGLE COLORS INDIVIDUALY\n"));
+    for (byte i=0; i<3; i++) {
+        Serial.print(F("\nTOGGLE "));
+        Serial.print(colorNames[i]);
+        Serial.print(F("\n"));
+        for (byte j=0; j<10; j++) { 
+            rgb.toggle(colors[i]);
+            shortDelay();
+        }
+        longDelay();
+    }
+    printDivider(); 
+    Serial.print(F("\nDONE\n"));
+    printDivider(); 
+}
 
+void printDivider() {
+    Serial.print(F("\n-----------------------------\n"));
+}
 
+void shortDelay() {
+    delay(250);
+}
 
-
+void longDelay() {
+    delay(1750);
+}
