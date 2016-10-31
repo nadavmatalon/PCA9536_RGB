@@ -50,7 +50,6 @@
     3. (Optional) Open the Serial Port (make sure the baid-rate is to 9600)
     4. Sit back and watch the pretty lights :-)
 
-
     BUG REPORTS
     -----------
     Please report any bugs/issues/suggestions in the Github Repository of this library at:

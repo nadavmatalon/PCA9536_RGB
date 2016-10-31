@@ -24,7 +24,9 @@ The basis of the current API comes from the [PCA9536 Library](https://github.com
 - **PCA9536_RGB.cpp** - Library Compilation.
 - **/examples**  
   - **/PCA9536_Usage**
-  - **PCA9536_Usage.ino** - A sketch providing illustration of how to use the different functions of this library.
+    - **PCA9536_Usage.ino** - A sketch providing illustration of how to use the basic functions of this library.
+  - **/PCA9536_Blink**
+    - **PCA9536_Blink.ino** - A sketch providing illustration of how to use the blink() functionality.
 - **/extras** 
   - **License.txt** - A cope of the end-user license agreement.  
   - **/eagle**
@@ -152,20 +154,18 @@ Parameters:&nbsp;&nbsp;&nbsp; color_t (RED / GREEN / BLUE), Optional: unsigned i
 Description:&nbsp;&nbsp;sets up the blink configuration for a specified color. If no second parameter is given, blink 'onTime' (and, equally, 'offTime') is set to 500mS by default. Otherwise, it is possible to custom set the duration of the 'ON' (and 'OFf') period by specifying a value for the second parameter. This function is necessary to enable the blinkOn() and blinkOff() functions. It is best to place it in the Setup() section of the sketch so that it'll only executed once at runtime.  
 Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None  
 
-__blinkOn();__  
+__blink();__  
 Parameters:&nbsp;&nbsp;&nbsp;color_t (RED / GREEN / BLUE)  
 Description:&nbsp;&nbsp;turns on the blinking of a specified color based on the settings defined in blinkSetup(). Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None  
 
-__blinkOff();__  
+__state();__  
 Parameters:&nbsp;&nbsp;&nbsp;color_t (RED / GREEN / BLUE)  
-Description:&nbsp;&nbsp;turns off the blinking of the specified color  
-Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None  
+Description:&nbsp;&nbsp;returns the specified color's current state (0 = OFF / 1 = ON). Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Byte  
 
-
-## RUNNING THE EXAMPLE SKETCH
+## RUNNING THE EXAMPLE SKETCHES
 
 1) Start the Arduino IDE and open the relevant example sketch  
-2) Hook-up the PCA9536 to the Arduino as explained in the sketch's notes   
+2) Hook-up the PCA9536 to the Arduino as explained in the sketch's notes  
 3) Upload the sketch to the Arduino  
 
 ## BUG REPORTS
@@ -174,11 +174,10 @@ Please report any issues/bugs/suggestions in the [Issues](https://github.com/nad
 
 ## TODO
 
-* Formulate an automatic interrupt-based mechanism for the blink functionality (?)
-
 ## VERSION HISTORY
 
 __Ver. 1.0.0__ - First release (24.10.16)  
+__Ver. 1.1.0__ - Interrupt-Based Blink (31.10.16)  
 
 ## LICENSE
 

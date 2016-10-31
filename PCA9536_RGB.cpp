@@ -7,7 +7,7 @@
     PCA9536 RGB LED Driver
  
     Ver. 1.0.0 - First release (25.10.16)
-    Ver. 1.1.0 - Interupt-based Blink (29.10.16)
+    Ver. 1.1.0 - Interupt-based Blink (31.10.16)
 
  *==============================================================================================================*
     LICENSE

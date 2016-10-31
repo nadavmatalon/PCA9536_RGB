@@ -21,8 +21,7 @@ turnOn	KEYWORD2
 turnOff	KEYWORD2
 toggle	KEYWORD2
 blinkSetup	KEYWORD2
-blinkOn	KEYWORD2
-blinkOff	KEYWORD2
+blink	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
@@ -40,4 +39,3 @@ BLUE	LITERAL1
 
 led_type_t	LITERAL2
 color_t	LITERAL2
-blink	LITERAL2
