@@ -2,14 +2,14 @@
 
 PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);
 
-volatile boolean switchFlag;
+volatile byte switchFlag;
 
 void setup() {
-    DDRD &= ~(1 << DDD2); PORTD |= (1 << PORTD2);                               // pinMode(PIN_D2, INPUT_PULLUP)
-    switchFlag = !bitRead(PIND, 2);                                             // !digitalRead(PIN_D2)
-    EICRA |= (1 << ISC01);                                                      // Trigger INT0 on falling edge
-    EIMSK |= (1 << INT0);                                                       // Enable external interrupt INT0
-    sei();                                                                      // Enable global interrupts
+    DDRD &= ~bit(DDD2); PORTD |= bit(PORTD2);        // pinMode(PIN_D2, INPUT_PULLUP)
+    switchFlag = !bitRead(PIND, PIND2);              // !digitalRead(PIN_D2)
+    EICRA |= bit(ISC01);                             // Trigger INT0 on falling edge
+    EIMSK |= bit(INT0);                              // Enable external interrupt INT0
+    sei();                                           // Enable global interrupts
     Wire.begin();
     rgb.init();
     rgb.blinkSetup(500);
@@ -20,7 +20,7 @@ void loop() {
 }
 
 ISR(EXT_INT0_vect) {
-    switchFlag = !bitRead(PIND, 2);
+    switchFlag = !bitRead(PIND, PIND2);
 }
 
 void switchCondition() {

@@ -71,7 +71,7 @@ __asm volatile ("nop");
 #include <Arduino.h>
 #include "PCA9536.h"
 
-static volatile boolean _blinkFlag = false;
+static volatile byte _blinkFlag = 0;
 
 namespace Pca9536_Rgb {
 
