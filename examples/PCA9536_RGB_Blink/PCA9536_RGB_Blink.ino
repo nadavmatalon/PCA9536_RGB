@@ -39,10 +39,11 @@
 
     PUSH BUTTON SWITCH - connect a push-button switch between Arduino Digital Pin 2 and GND.
 
-
     IMPORTANT: It is possible to connect any type of RGB Led (Commone-Anode / Common-Cathode)
                to any of the PCA9536's I/O pins (IO0, IO1, IO2, IO3), but then it is necessary
-               to update the constructor's configuration accordingly in the sketch itself.
+               to update the constructor's configuration accordingly in the sketch itself, and,
+               if it's a Common-Cathod type of Led, connect the Common-Cathode pin to Arduino GND
+               (rather than the Arduino 5V Output).
 
     BUG REPORTS
     -----------
@@ -73,31 +74,35 @@
 
 #include "PCA9536_RGB.h"
 
-PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);              // construct a new PCA9536_RGB instance
+PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);                        // construct a new PCA9536_RGB instance
 
-volatile byte switchFlag;                             // a flag is needed since running the blinking inside the ISR 
-                                                      // takes too long
+const color_t BLINK_COLOR = GREEN;                              // color to be blinked
+
+const unsigned int BLINK_RATE = 750;                            // selected color 'ON' time (and, equally, 'OFF' time) in mS
+
+volatile byte switchFlag;                                       // a flag is needed since running the blinking inside the ISR
+                                                                // takes too long
 void setup() {
-    DDRD &= ~bit(DDD2); PORTD |= bit(PORTD2);         // pinMode(digital pin 2, INPUT_PULLUP)
-    switchFlag = !bitRead(PIND, PIND2);               // set/clear switchFlag according to buton state (pressed or not)
-    EICRA |= bit(ISC00);                              // Trigger INT0 on CHANGE
-    EIMSK |= bit(INT0);                               // Enable external interrupt INT0
-    sei();                                            // Enable global interrupts
-    Wire.begin();                                     // Join the I2C Bus
-    rgb.init();                                       // Initialize the RGB Led instance
-    rgb.blinkSetup(500);                              // Set blinking rate (= onTime) to 500mS
+    DDRD &= ~bit(DDD2); PORTD |= bit(PORTD2);                   // pinMode(digital pin 2, INPUT_PULLUP)
+    switchFlag = !bitRead(PIND, PIND2);                         // set/clear switchFlag according to initial button state (pressed or not)
+    EICRA |= bit(ISC00);                                        // trigger INT0 on any button state CHANGE
+    EIMSK |= bit(INT0);                                         // enable external interrupt INT0
+    sei();                                                      // enable global interrupts
+    Wire.begin();                                               // join the I2C Bus
+    rgb.init();                                                 // initialize the RGB Led instance with the above configuration
+    rgb.blinkSetup(BLINK_RATE);                                 // set color blinking rate (= onTime) in mS
   }
 
 void loop() {
-    switchCondition();                                // check if button is pressed or not and blink accordingly
+    switchCondition();                                          // check if button is pressed or not and blink accordingly
 }
 
-ISR(EXT_INT0_vect) {                                  // ISR for external interrupt on digital pin 2
-    switchFlag = 1;                                   // if interrupt fires (button is pressed), set switchFlag
+ISR(EXT_INT0_vect) {                                            // ISR for external interrupt on digital pin 2
+    switchFlag = 1;                                             // if interrupt fires (button is pressed), set switchFlag
 }
 
 void switchCondition() {
-    if (bitRead(PIND, PIND2)) switchFlag = false;     // if button is not pressed (line is HIGH) clear switchFlag
-    if (switchFlag) rgb.blink(GREEN);                 // if switchFlag is set (button is pressed), blink GREEN color
-    else if (rgb.state(GREEN)) rgb.turnOff(GREEN);    // otherwise, if GREEN color remains ON, turn it OFF
+    if (bitRead(PIND, PIND2)) switchFlag = false;               // if button is not pressed (line is HIGH) clear switchFlag
+    if (switchFlag) rgb.blink(BLINK_COLOR);                     // if switchFlag is set (button is pressed), blink selected color
+    else if (rgb.state(BLINK_COLOR)) rgb.turnOff(BLINK_COLOR);  // if switchFlag is clear and selected color is ON, turn it OFF
 }
