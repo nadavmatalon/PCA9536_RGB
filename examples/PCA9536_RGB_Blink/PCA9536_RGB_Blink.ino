@@ -77,7 +77,7 @@
 PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);                        // construct a new PCA9536_RGB instance
 
 const color_t BLINK_COLOR = GREEN;                              // selected color to be blinked
-const unsigned int BLINK_RATE = 750;                            // blink rate (= color 'ON' period; equal to 'OFF' period) in mS
+const unsigned int BLINK_RATE = 500;                            // blink rate (= color 'ON' period; equal to 'OFF' period) in mS
 
 void setup() {
     DDRD &= ~bit(DDD2);                                         // pinMode(digital pin 2, INPUT)
