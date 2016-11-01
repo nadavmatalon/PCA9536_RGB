@@ -77,7 +77,7 @@
 PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);                        // construct a new PCA9536_RGB instance
 
 const color_t BLINK_COLOR = GREEN;                              // selected color to be blinked
-const unsigned int BLINK_RATE = 750;                            // blink rate (= color 'ON' period; equal to 'OFF' period) in mS
+const unsigned int BLINK_RATE = 600;                            // blink rate (= color 'ON' period; equal to 'OFF' period) in mS
 
 void setup() {
     DDRD &= ~bit(DDD2);                                         // pinMode(digital pin 2, INPUT)
@@ -90,7 +90,7 @@ void setup() {
 
 void loop() {
     if (GPIOR0) rgb.blink(BLINK_COLOR);                         // if button is being pressed, blink selected color
-    else if (rgb.state(BLINK_COLOR)) rgb.turnOff(BLINK_COLOR);  // if button was released, but selected color remains ON, turn off selected color
+    else if (rgb.state(BLINK_COLOR)) rgb.turnOff(BLINK_COLOR);  // if button has been released, but selected color remains ON, turn off color
 }
 
 ISR(INT0_vect, ISR_NAKED) {                                     // Part I of ISR for INT0 (digital pin 2)
