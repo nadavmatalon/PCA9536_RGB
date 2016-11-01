@@ -76,33 +76,33 @@
 
 PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);                        // construct a new PCA9536_RGB instance
 
-const color_t BLINK_COLOR = GREEN;                              // color to be blinked
+const color_t BLINK_COLOR = GREEN;                              // selected color to be blinked
+const unsigned int BLINK_RATE = 750;                            // blink rate (= color 'ON' period; equal to 'OFF' period) in mS
 
-const unsigned int BLINK_RATE = 750;                            // selected color 'ON' time (and, equally, 'OFF' time) in mS
-
-volatile byte switchFlag;                                       // a flag is needed since running the blinking inside the ISR
-                                                                // takes too long
 void setup() {
-    DDRD &= ~bit(DDD2); PORTD |= bit(PORTD2);                   // pinMode(digital pin 2, INPUT_PULLUP)
-    switchFlag = !bitRead(PIND, PIND2);                         // set/clear switchFlag according to initial button state (pressed or not)
-    EICRA |= bit(ISC00);                                        // trigger INT0 on any button state CHANGE
+    DDRD &= ~bit(DDD2);                                         // pinMode(digital pin 2, INPUT)
+    EICRA |= bit(ISC00);                                        // trigger INT0 on any state CHANGE (both button pressed and released)
     EIMSK |= bit(INT0);                                         // enable external interrupt INT0
-    sei();                                                      // enable global interrupts
     Wire.begin();                                               // join the I2C Bus
-    rgb.init();                                                 // initialize the RGB Led instance with the above configuration
-    rgb.blinkSetup(BLINK_RATE);                                 // set color blinking rate (= onTime) in mS
-  }
+    rgb.init();                                                 // initialize the PCA9536_RGB instance with the above defined configuration
+    rgb.blinkSetup(BLINK_RATE);                                 // set blink rate in mS
+}
 
 void loop() {
-    switchCondition();                                          // check if button is pressed or not and blink accordingly
+    if (GPIOR0) rgb.blink(BLINK_COLOR);                         // if button is being pressed, blink selected color
+    else if (rgb.state(BLINK_COLOR)) rgb.turnOff(BLINK_COLOR);  // if button was released, but selected color remains ON, turn off selected color
 }
 
-ISR(EXT_INT0_vect) {                                            // ISR for external interrupt on digital pin 2
-    switchFlag = 1;                                             // if interrupt fires (button is pressed), set switchFlag
+ISR(INT0_vect, ISR_NAKED) {                                     // Part I of ISR for INT0 (digital pin 2)
+    asm volatile (                                              // update GPIOR0[2] to store inverse state of PIND2
+    "    sbic %[pin], %[bit]    \n"                             // if bitRead (PIND, 2), skip the next instruction 
+    "    cbi %[gpio], 0         \n"                             // setBit(GPIO0, 2)
+    "    sbis %[pin], %[bit]    \n"                             // if bitRead (PIND, 2), skip the next instruction    
+    "    sbi %[gpio], 0         \n"                             // setBit(GPIO0, 2)
+    "    rjmp INT0_vect_part_2  \n"                             // move on to part 2 of the ISR for INT0
+    :: [pin]  "I" (_SFR_IO_ADDR(PIND)),                         // selected register to be tied to GPIOR0 (in this case: PIND)
+       [bit]  "I" (2),                                          // specific bit number in above register to be tied to first bit og GPIOR0 
+       [gpio] "I" (_SFR_IO_ADDR(GPIOR0)));                      // selected GPIOR register (in this case: GPIOR0)
 }
 
-void switchCondition() {
-    if (bitRead(PIND, PIND2)) switchFlag = false;               // if button is not pressed (line is HIGH) clear switchFlag
-    if (switchFlag) rgb.blink(BLINK_COLOR);                     // if switchFlag is set (button is pressed), blink selected color
-    else if (rgb.state(BLINK_COLOR)) rgb.turnOff(BLINK_COLOR);  // if switchFlag is clear and selected color is ON, turn it OFF
-}
+ISR(INT0_vect_part_2) {}                                        // Part II of ISR for INT0 (digital pin 2) - needed for compilation

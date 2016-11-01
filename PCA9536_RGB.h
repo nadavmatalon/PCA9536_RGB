@@ -107,6 +107,7 @@ namespace Pca9536_Rgb {
             byte _red;
             byte _green;
             byte _blue;
+            byte _firstBlink;
     };
 }
 

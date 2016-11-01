@@ -59,6 +59,7 @@ PCA9536_RGB::~PCA9536_RGB() {}
  *==============================================================================================================*/
 
 void PCA9536_RGB::init() {
+    _firstBlink = 1;
     for (byte i=0; i<3; i++) {
         setMode(getPin(i), _ledType);
         setState(getPin(i), ~_ledType);
@@ -151,7 +152,10 @@ void PCA9536_RGB::blinkSetup(unsigned int onTime) {
 void PCA9536_RGB::blink(color_t color) {
     if (_blinkFlag) {
         _blinkFlag = 0;
-        toggle(color);
+        if (_firstBlink) {
+            _firstBlink = 0;
+            turnOn(color);
+        } else toggle(color);
     }
 }
 
