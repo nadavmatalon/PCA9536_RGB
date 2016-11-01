@@ -156,11 +156,13 @@ Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None
 
 __blink();__  
 Parameters:&nbsp;&nbsp;&nbsp;color_t (RED / GREEN / BLUE)  
-Description:&nbsp;&nbsp;turns on the blinking of a specified color based on the settings defined in blinkSetup(). Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None  
+Description:&nbsp;&nbsp;blinks the specified color based on the settings defined in blinkSetup().  
+Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;None  
 
 __state();__  
 Parameters:&nbsp;&nbsp;&nbsp;color_t (RED / GREEN / BLUE)  
-Description:&nbsp;&nbsp;returns the specified color's current state (0 = OFF / 1 = ON).   Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Byte  
+Description:&nbsp;&nbsp;returns the specified color's current state (0 = OFF / 1 = ON)   
+Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Byte  
 
 ## RUNNING THE EXAMPLE SKETCHES
 
