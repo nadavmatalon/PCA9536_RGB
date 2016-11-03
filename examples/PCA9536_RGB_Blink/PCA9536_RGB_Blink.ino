@@ -93,16 +93,16 @@ void loop() {
     else if (rgb.state(BLINK_COLOR)) rgb.turnOff(BLINK_COLOR);  // if button has been released, but selected color remains ON, turn off color
 }
 
-ISR(INT0_vect, ISR_NAKED) {                                     // Part I of ISR for INT0 (digital pin 2)
-    asm volatile (                                              // update GPIOR0[2] to store inverse state of PIND2
-    "    sbic %[pin], %[bit]    \n"                             // if bitRead (PIND, 2), skip the next instruction 
-    "    cbi %[gpio], 0         \n"                             // setBit(GPIO0, 2)
-    "    sbis %[pin], %[bit]    \n"                             // if bitRead (PIND, 2), skip the next instruction    
-    "    sbi %[gpio], 0         \n"                             // setBit(GPIO0, 2)
+ISR(INT0_vect, ISR_NAKED) {                                     // Part I of ISR for INT0 (on digital pin 2)
+    asm volatile (                                              // bitWrite(GPIOR0, 0, ~PIND2)
+    "    sbic %[pin], %[bit]    \n"                             // if !bitRead(PIND, 2), skip the next instruction
+    "    cbi %[gpio], 0         \n"                             // bitClear(GPIO0, 0)
+    "    sbis %[pin], %[bit]    \n"                             // if bitRead(PIND, 2), skip the next instruction
+    "    sbi %[gpio], 0         \n"                             // bitSet(GPIO0, 0)
     "    rjmp INT0_vect_part_2  \n"                             // move on to part 2 of the ISR for INT0
     :: [pin]  "I" (_SFR_IO_ADDR(PIND)),                         // selected register to be tied to GPIOR0 (in this case: PIND)
        [bit]  "I" (2),                                          // specific bit number in above register to be tied to first bit og GPIOR0 
        [gpio] "I" (_SFR_IO_ADDR(GPIOR0)));                      // selected GPIOR register (in this case: GPIOR0)
 }
 
-ISR(INT0_vect_part_2) {}                                        // Part II of ISR for INT0 (digital pin 2) - needed for compilation
+ISR(INT0_vect_part_2) {}                                        // Part II of ISR for INT0 (on digital pin 2) - needed for compilation
