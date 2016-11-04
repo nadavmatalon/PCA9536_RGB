@@ -39,7 +39,13 @@
 
     RGB LED COMMON-CATHODE PIN - Connect to Arduino GND
 
-    PUSH BUTTON SWITCH - connect a push-button switch between Arduino Digital Pin 2 and GND.
+    PUSH-BUTTON SWITCH - Connect one end to Arduino Digital Pin 2, and the other end to Arduino GND
+
+    RUNNING THE SKETCH
+    ------------------
+    1. Hook-up the PCA9536 and RGB Led (Common-Anode) as instructed above
+    2. Upload the sketch to the Arduino
+    3. Press the push-button switch to see the blinking in action
 
     BUG REPORTS
     -----------
