@@ -8,7 +8,7 @@
  
     Ver. 1.0.0 - First release (25.10.16)
     Ver. 1.1.0 - Interupt-based Blink (31.10.16)
-    Ver. 1.2.0 - Code odifications re C-CATHODE Leds (4.11.16)
+    Ver. 1.2.0 - Code odifications for C-CATHODE Leds (4.11.16)
  
  *===============================================================================================================*
     INTRODUCTION

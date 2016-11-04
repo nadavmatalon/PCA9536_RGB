@@ -172,7 +172,8 @@ Returns:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Byte
 
 1) Start the Arduino IDE and open the relevant example sketch  
 2) Hook-up the PCA9536 to the Arduino as explained in the sketch's notes  
-3) Upload the sketch to the Arduino  
+3) Upload the sketch to the Arduino 
+4) Follow the specific instructions for running the sketch as explained in the sketch's notes
 
 ## BUG REPORTS
 
@@ -184,7 +185,7 @@ Please report any issues/bugs/suggestions in the [Issues](https://github.com/nad
 
 __Ver. 1.0.0__ - First release (24.10.16)  
 __Ver. 1.1.0__ - Interrupt-Based Blink (31.10.16)  
-__Ver. 1.2.0__ - Code odifications re C-CATHODE Leds (4.11.16)
+__Ver. 1.2.0__ - Code odifications for C-CATHODE Leds (4.11.16)
 
 ## LICENSE
 
