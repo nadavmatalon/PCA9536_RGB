@@ -8,6 +8,7 @@
  
     Ver. 1.0.0 - First release (25.10.16)
     Ver. 1.1.0 - Interupt-based Blink (31.10.16)
+    Ver. 1.2.0 - Code odifications re C-CATHODE Leds (4.11.16)
 
  *==============================================================================================================*
     LICENSE
@@ -60,10 +61,9 @@ PCA9536_RGB::~PCA9536_RGB() {}
 
 void PCA9536_RGB::init() {
     _firstBlink = 1;
-    for (byte i=0; i<3; i++) {
-        setMode(getPin(i), _ledType);
-        setState(getPin(i), ~_ledType);
-    }
+    byte colors[3] = { _red, _green, _blue };
+    for (byte i=0; i<3; i++) setMode(colors[i], IO_OUTPUT);
+    turnOff();
 }
 
 /*==============================================================================================================*
@@ -79,7 +79,7 @@ void PCA9536_RGB::turnOn(color_t color) {                                       
  *==============================================================================================================*/
 
 void PCA9536_RGB::turnOn() {
-    for (byte i=0; i<3; i++) setState(getPin(i), _ledType);
+    for (byte i=0; i<3; i++) turnOn(i);
 }
 
 /*==============================================================================================================*
@@ -87,7 +87,7 @@ void PCA9536_RGB::turnOn() {
  *==============================================================================================================*/
 
 void PCA9536_RGB::turnOff(color_t color) {                                       // PARAM: RED / GREEN / BLUE
-    setState(getPin(color), ~_ledType);
+    setState(getPin(color), (_ledType  ^ 1));
 }
 
 /*==============================================================================================================*
@@ -95,7 +95,7 @@ void PCA9536_RGB::turnOff(color_t color) {                                      
  *==============================================================================================================*/
 
 void PCA9536_RGB::turnOff() {
-    for (byte i=0; i<3; i++) setState(getPin(i), ~_ledType);
+    for (byte i=0; i<3; i++) turnOff(i);
 }
 
 /*==============================================================================================================*
@@ -164,7 +164,7 @@ void PCA9536_RGB::blink(color_t color) {
  *==============================================================================================================*/
 
 byte PCA9536_RGB::state(color_t color) {
-    return getState(getPin(color)) ? _ledType : ~_ledType;
+    return getState(getPin(color)) ? _ledType : (_ledType  ^ 1);
 }
 
 /*==============================================================================================================*
@@ -186,4 +186,3 @@ byte PCA9536_RGB::getPin(color_t color) {
 ISR(TIMER1_OVF_vect) {
     _blinkFlag = 1;
 }
-

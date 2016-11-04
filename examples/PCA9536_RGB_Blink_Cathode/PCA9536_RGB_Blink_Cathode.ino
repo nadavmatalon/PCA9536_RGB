@@ -1,6 +1,6 @@
 /*
-    PCA9536_RGB LIBRARY - BLINK COLOR EXAMPLE
-    -----------------------------------------
+    PCA9536_RGB LIBRARY - BLINK COLOR EXAMPLE (COMMON-CATHODE)
+    ----------------------------------------------------------
 
     INTRODUCTION
     ------------
@@ -25,9 +25,11 @@
         GND --|       |-- IO3
                -------
 
-    PIN 1 (IO0) - Connect BLUE  pin of a Common-Anode RGB Led via appropriate series resistor
-    PIN 2 (IO1) - Connect GREEN pin of a Common-Anode RGB Led via appropriate series resistor
-    PIN 3 (IO2) - Connect RED   pin of a Common-Anode RGB Led via appropriate series resistor
+    This sketch should be used with the following hookup:
+
+    PIN 1 (IO0) - Connect to Common-Cathode RGB Led BLUE  pin via appropriate series resistor
+    PIN 2 (IO1) - Connect to Common-Cathode RGB Led GREEN pin via appropriate series resistor
+    PIN 3 (IO2) - Connect to Common-Cathode RGB Led RED   pin via appropriate series resistor
     PIN 4 (GND) - Connect to Arduino GND
     PIN 5 (IO3) - Leave unconnected for the purpose of this sketch
     PIN 6 (SCL) - Connect to Arduino Pin A5 with a 2K2 (400MHz) or 10K (100MHz) pull-up resistor
@@ -35,15 +37,9 @@
     PIN 8 (VCC) - Connect to Arduino 5V output
     DECOUPING   - Connect a 0.1uF Ceramic Capacitor between the PCA9536's VCC & GND pins
 
-    RGB LED COMMON-ANODE PIN - Connect to Arduino 5V output
+    RGB LED COMMON-CATHODE PIN - Connect to Arduino GND
 
     PUSH BUTTON SWITCH - connect a push-button switch between Arduino Digital Pin 2 and GND.
-
-    IMPORTANT: It is possible to connect any type of RGB Led (Commone-Anode / Common-Cathode)
-               to any of the PCA9536's I/O pins (IO0, IO1, IO2, IO3), but then it is necessary
-               to update the constructor's configuration accordingly in the sketch itself, and,
-               if it's a Common-Cathod type of Led, connect the Common-Cathode pin to Arduino GND
-               (rather than the Arduino 5V Output).
 
     BUG REPORTS
     -----------
@@ -74,7 +70,7 @@
 
 #include "PCA9536_RGB.h"
 
-PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);                        // construct a new PCA9536_RGB instance
+PCA9536_RGB rgb(IO2, IO1, IO0, C_CATHODE);                      // construct a new PCA9536_RGB instance
 
 const color_t BLINK_COLOR = GREEN;                              // selected color to be blinked
 const unsigned int BLINK_RATE = 600;                            // blink rate (= color 'ON' period; equal to 'OFF' period) in mS

@@ -2,7 +2,7 @@
 
 [![Platform Badge](https://img.shields.io/badge/platform-Arduino-orange.svg)](https://www.arduino.cc/)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-[![SemVer](https://img.shields.io/badge/SemVer-1.1.0-brightgreen.svg)](http://semver.org/)
+[![SemVer](https://img.shields.io/badge/SemVer-1.2.0-brightgreen.svg)](http://semver.org/)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 [![SemVer](https://img.shields.io/badge/eagle-pcb-yellow.svg)](https://cadsoft.io/)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -23,10 +23,14 @@ The basis of the current API comes from the [PCA9536 Library](https://github.com
 - **PCA9536_RGB.h** - Library Header file.
 - **PCA9536_RGB.cpp** - Library Compilation.
 - **/examples**  
-  - **/PCA9536_Usage**
-    - **PCA9536_Usage.ino** - A sketch providing illustration of how to use the basic functions of this library.
-  - **/PCA9536_Blink**
-    - **PCA9536_Blink.ino** - A sketch providing illustration of how to use the blink() functionality.
+  - **/PCA9536_Usage_Anode**
+    - **PCA9536_Usage_Anode.ino** - A sketch providing illustration of how to use the basic functions of this library with a Common-Anode RGB Led.
+  - **/PCA9536_Usage_Cathode**
+    - **PCA9536_Usage_Cathode.ino** - A sketch providing illustration of how to use the basic functions of this library with a Common-Cathode RGB Led.
+  - **/PCA9536_Blink_Anode**
+    - **PCA9536_Blink_Anode.ino** - A sketch providing illustration of how to use the blink() functionality with a Common-Cathode RGB Led.
+  - **/PCA9536_Blink_Cathode**
+    - **PCA9536_Blink_Cathode.ino** - A sketch providing illustration of how to use the blink() functionality with a Common-Cathode RGB Led.
 - **/extras** 
   - **License.txt** - A cope of the end-user license agreement.  
   - **/eagle**
@@ -180,6 +184,7 @@ Please report any issues/bugs/suggestions in the [Issues](https://github.com/nad
 
 __Ver. 1.0.0__ - First release (24.10.16)  
 __Ver. 1.1.0__ - Interrupt-Based Blink (31.10.16)  
+__Ver. 1.2.0__ - Code odifications re C-CATHODE Leds (4.11.16)
 
 ## LICENSE
 

@@ -1,6 +1,6 @@
 /*
-    PCA9536_RGB LIBRARY - USAGE EXAMPLE
-    -----------------------------------
+    PCA9536_RGB LIBRARY - USAGE EXAMPLE (COMMON-CATHODE)
+    ----------------------------------------------------
 
     INTRODUCTION
     ------------
@@ -25,11 +25,11 @@
         GND --|       |-- IO3
                -------
 
-    This hookup can be used with the following sketch:
+    This sketch should be used with the following hookup:
 
-    PIN 1 (IO0) - Connect BLUE  pin of a Common-Anode RGB Led via appropriate series resistor
-    PIN 2 (IO1) - Connect GREEN pin of a Common-Anode RGB Led via appropriate series resistor
-    PIN 3 (IO2) - Connect RED   pin of a Common-Anode RGB Led via appropriate series resistor
+    PIN 1 (IO0) - Connect to Common-Cathode RGB Led BLUE  pin via appropriate series resistor
+    PIN 2 (IO1) - Connect to Common-Cathode RGB Led GREEN pin via appropriate series resistor
+    PIN 3 (IO2) - Connect to Common-Cathode RGB Led RED   pin via appropriate series resistor
     PIN 4 (GND) - Connect to Arduino GND
     PIN 5 (IO3) - Leave unconnected for the purpose of this sketch
     PIN 6 (SCL) - Connect to Arduino Pin A5 with a 2K2 (400MHz) or 10K (100MHz) pull-up resistor
@@ -37,15 +37,11 @@
     PIN 8 (VCC) - Connect to Arduino 5V output
     DECOUPING   - Connect a 0.1uF Ceramic Capacitor between the PCA9536's VCC & GND pins
 
-    RGB LED COMMON-ANODE PIN - Connect to Arduino 5V output
-
-    IMPORTANT: It is possible to connect any type of RGB Led (Commone-Anode / Common-Cathode)
-               to any of the PCA9536's I/O pins (IO0, IO1, IO2, IO3), but then it is necessary
-               to update the constructor's configuration accordingly in the sketch itself.
+    RGB LED COMMON-CATHODE PIN - Connect to Arduino GND
 
     RUNNING THE SKETCH
     ------------------
-    1. Hook-up the PCA9536 and RGB Led as instructed above
+    1. Hook-up the PCA9536 and RGB Led (Common-Cathode) as instructed above
     2. Upload the sketch to the Arduino
     3. (Optional) Open the Serial Port (make sure the baid-rate is to 9600)
     4. Sit back and watch the pretty lights :-)
@@ -79,7 +75,7 @@
 
 #include "PCA9536_RGB.h"
 
-PCA9536_RGB rgb(IO2, IO1, IO0, C_ANODE);
+PCA9536_RGB rgb(IO2, IO1, IO0, C_CATHODE);
 
 color_t colors[3] = { RED, GREEN, BLUE };
 String colorNames[3] = { "RED", "GREEN", "BLUE" };
@@ -88,6 +84,7 @@ void setup() {
     Serial.begin(9600);
     Wire.begin();
     rgb.init();
+    rgb.turnOff();
     longDelay();
     printDivider();
     Serial.print(F("\nPCA9536 RGB LED LIBRARY USAGE\n"));
