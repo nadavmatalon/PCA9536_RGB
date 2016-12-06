@@ -16,7 +16,9 @@ Communication between the Arduino (master) and the RGB Led (slave) is handled by
 
 The basis of the current API comes from the [PCA9536 Library](https://github.com/nadavmatalon/PCA9536), which is expanded here to include the relevant functions, including: Turning on a specific color (or all colors) on and off, Toggling a color, and an independent Blinking functionality for each color which doesn't make use of delays and therefore does not interrupt other routines running simultaniously in the code.
 
-[PCA9536 DATASHEET](http://www.nxp.com/documents/data_sheet/PCA9536.pdf)
+<img src="extras/images/pca9536_pinout.png" alt="PCA9536 PINOUT" width="350" height="240">
+
+Source: [PCA9536 DATASHEET](http://www.nxp.com/documents/data_sheet/PCA9536.pdf)
 
 ## REPOSITORY CONTENTS
 
@@ -36,6 +38,8 @@ The basis of the current API comes from the [PCA9536 Library](https://github.com
   - **/eagle**
     - **PCA9536_RGB.sch** - Schematic file for the PCA9536 &amp; Broadcom's [HSMF-C118](http://www.avagotech.com/products/leds-and-displays/chip-leds/multi-color-surface-mount/hsmf-c118) (or any other SMD Common-Anode RGB Led in a 1210 package) breakout board.
     - **PCA9536_RGB.brd** - Board layout file for the PCA9536 &amp; Broadcom's [HSMF-C118](http://www.avagotech.com/products/leds-and-displays/chip-leds/multi-color-surface-mount/hsmf-c118) (or any other SMD Common-Anode RGB Led in a 1210 package) breakout board.
+  - **/images**
+    - **pca9536_pinout.png** - Pinout image of the PCA9536.
 - **keywords.txt** - Keywords for this library which will be highlighted in sketches within the Arduino IDE. 
 - **library.properties** - General library properties for the Arduino's IDE (>1.5) Library Package Manager.
 - **README.md** - The readme file for this library.
